@@ -34,5 +34,4 @@ python main.py
 - Notes
 - Ensure that you have the necessary .vm files for previewing.
 - The application uses the Airspeed library for template rendering.
-- Feel free to use this simple Velocity template previewer to experiment with your Velocity templates and see their
-  output instantly.
+- Feel free to use this simple Velocity template previewer to experiment with your Velocity templates.
