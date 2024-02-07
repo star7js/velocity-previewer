@@ -1,12 +1,12 @@
-# This is a simple Velocity template example.
+## This is a simple Velocity template example.
 
-# Define a variable
+## Define a variable
 #set( $greeting = "Hello, Velocity!" )
 
-# Output the variable
+## Output the variable
 $greeting
 
-# A simple loop example
+## A simple loop example
 #foreach( $num in [1..5] )
   Iteration number: $num
 #end
