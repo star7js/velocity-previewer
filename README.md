@@ -18,12 +18,14 @@ Run the application by executing the following command in your terminal:
 ```bash
 python main.py
 ```
-![Example Template Render](example-template-render.png)
+
 - The application window will appear with a text editor, a "Render" button, and an output viewer.
 - Click the "Open" option in the "File" menu to open an existing Velocity template file (with a .vm extension).
 - Edit the template in the text editor.
 - Click the "Render" button to render the template. The rendered output will be displayed in the output viewer.
 - You can also save your edited template using the "Save" option in the "File" menu.
+
+![Example Template Render](example-template-render.png)
 
 ## Features
 
