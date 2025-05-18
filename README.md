@@ -33,7 +33,7 @@ python main.py
 - Edit and save template files.
 - Render Velocity templates and display the output.
 - Error handling for template rendering.
-- Notes
+
 - Ensure that you have the necessary .vm files for previewing.
 - The application uses the Airspeed library for template rendering.
 - Feel free to use this simple Velocity template previewer to experiment with your Velocity templates.
