@@ -7,9 +7,8 @@ from PyQt5.QtWidgets import (
 from PyQt5.QtCore import Qt, QSize
 from PyQt5.QtGui import QIcon, QKeySequence
 
-# Assuming airspeed is installed: pip install airspeed
 from airspeed import Template
-from airspeed import TemplateError  # CORRECTED IMPORT
+from airspeed import TemplateError  
 
 # --- Constants ---
 APP_NAME = "Velocity Template Previewer"
