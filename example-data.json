@@ -1,0 +1,48 @@
+{
+  "user": {
+    "name": "John Doe",
+    "age": 32,
+    "email": "john.doe@example.com",
+    "location": "San Francisco, CA",
+    "bio": "Experienced software engineer with a passion for building scalable web applications. I specialize in Python, JavaScript, and cloud technologies.",
+    "phone": "+1 (555) 123-4567",
+    "website": "https://johndoe.dev",
+    "linkedin": "https://linkedin.com/in/johndoe",
+    "skills": [
+      "Python",
+      "JavaScript",
+      "React",
+      "Node.js",
+      "Docker",
+      "AWS",
+      "PostgreSQL",
+      "MongoDB"
+    ],
+    "experience": [
+      {
+        "title": "Senior Software Engineer",
+        "company": "TechCorp Inc.",
+        "startDate": "2020-01",
+        "endDate": "Present",
+        "description": "Leading development of microservices architecture and mentoring junior developers."
+      },
+      {
+        "title": "Full Stack Developer",
+        "company": "StartupXYZ",
+        "startDate": "2018-03",
+        "endDate": "2019-12",
+        "description": "Built and maintained multiple web applications using modern JavaScript frameworks."
+      },
+      {
+        "title": "Junior Developer",
+        "company": "WebSolutions",
+        "startDate": "2016-06",
+        "endDate": "2018-02",
+        "description": "Developed frontend components and backend APIs for client projects."
+      }
+    ]
+  },
+  "date": {
+    "format": "2024-01-15 14:30:00"
+  }
+} 
