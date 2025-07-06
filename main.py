@@ -816,7 +816,7 @@ class VelocityTemplatePreviewer(QMainWindow):
                 <li>Recent files support</li>
                 <li>Export to HTML</li>
             </ul>
-            <p>Built with PyQt5 and Airspeed.</p>"""
+            <p>Built with PyQt5 and Airspeed.</p>""",
         )
 
     def closeEvent(self, event):
