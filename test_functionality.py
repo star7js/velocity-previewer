@@ -31,7 +31,7 @@ def test_template_validation():
 
     is_valid, error = validate_template_syntax(valid_template)
     assert is_valid, f"Valid template failed validation: {error}"
-    print("✓ Valid template validation passed")
+    print("[OK] Valid template validation passed")
 
     # Invalid template (more obvious syntax error)
     invalid_template = """
@@ -44,12 +44,12 @@ def test_template_validation():
 
     is_valid, error = validate_template_syntax(invalid_template)
     # Note: Airspeed is quite lenient, so we'll just check that it doesn't crash
-    print(f"✓ Invalid template validation completed (result: {is_valid})")
+    print(f"[OK] Invalid template validation completed (result: {is_valid})")
 
     # Empty template
     is_valid, error = validate_template_syntax("")
     assert not is_valid, "Empty template should have failed validation"
-    print("✓ Empty template validation passed")
+    print("[OK] Empty template validation passed")
 
 
 def test_json_validation():
@@ -61,19 +61,19 @@ def test_json_validation():
     is_valid, error, data = validate_json_data(valid_json)
     assert is_valid, f"Valid JSON failed validation: {error}"
     assert data["name"] == "John", "JSON data not parsed correctly"
-    print("✓ Valid JSON validation passed")
+    print("[OK] Valid JSON validation passed")
 
     # Invalid JSON
     invalid_json = '{"name": "John", "age": 30,}'
     is_valid, error, data = validate_json_data(invalid_json)
     assert not is_valid, "Invalid JSON should have failed validation"
-    print("✓ Invalid JSON validation passed")
+    print("[OK] Invalid JSON validation passed")
 
     # Empty JSON
     is_valid, error, data = validate_json_data("")
     assert is_valid, "Empty JSON should be valid (empty dict)"
     assert data == {}, "Empty JSON should return empty dict"
-    print("✓ Empty JSON validation passed")
+    print("[OK] Empty JSON validation passed")
 
 
 def test_template_rendering():
@@ -95,7 +95,7 @@ def test_template_rendering():
     assert success, f"Template rendering failed: {result}"
     assert "Hello, World!" in result, "Rendered template missing expected content"
     assert "Python" in result, "Rendered template missing skills"
-    print("✓ Template rendering passed")
+    print("[OK] Template rendering passed")
 
 
 def test_html_export():
@@ -109,7 +109,7 @@ def test_html_export():
     assert "Hello, World!" in html, "HTML export missing content"
     assert "Test Export" in html, "HTML export missing title"
     assert "Velocity Template Previewer" in html, "HTML export missing app name"
-    print("✓ HTML export passed")
+    print("[OK] HTML export passed")
 
 
 def main():
@@ -122,11 +122,11 @@ def main():
         test_template_rendering()
         test_html_export()
 
-        print("\n🎉 All tests passed! The VM Visualizer is working correctly.")
+        print("\n[SUCCESS] All tests passed! The VM Visualizer is working correctly.")
         return True
 
     except Exception as e:
-        print(f"\n❌ Test failed: {e}")
+        print(f"\n[ERROR] Test failed: {e}")
         return False
 
 
