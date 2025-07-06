@@ -804,19 +804,19 @@ class VelocityTemplatePreviewer(QMainWindow):
         QMessageBox.about(
             self,
             "About Velocity Template Previewer",
-            f"""<h3>Velocity Template Previewer</h3>
-                         <p>Version 1.0</p>
-                         <p>A modern PyQt5 application for previewing and rendering Velocity templates.</p>
-                         <p>Features:</p>
-                         <ul>
-                             <li>Syntax highlighting for Velocity templates and JSON data</li>
-                             <li>Real-time template validation</li>
-                             <li>Background rendering for better performance</li>
-                             <li>Auto-save functionality</li>
-                             <li>Recent files support</li>
-                             <li>Export to HTML</li>
-                         </ul>
-                         <p>Built with PyQt5 and Airspeed.</p>""",
+            """<h3>Velocity Template Previewer</h3>
+            <p>Version 1.0</p>
+            <p>A modern PyQt5 application for previewing and rendering Velocity templates.</p>
+            <p>Features:</p>
+            <ul>
+                <li>Syntax highlighting for Velocity templates and JSON data</li>
+                <li>Real-time template validation</li>
+                <li>Background rendering for better performance</li>
+                <li>Auto-save functionality</li>
+                <li>Recent files support</li>
+                <li>Export to HTML</li>
+            </ul>
+            <p>Built with PyQt5 and Airspeed.</p>"""
         )
 
     def closeEvent(self, event):

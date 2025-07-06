@@ -4,7 +4,6 @@ Syntax highlighting classes for the Velocity Template Previewer.
 
 import re
 from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QColor, QFont
-from PyQt5.QtCore import Qt
 
 
 class VelocitySyntaxHighlighter(QSyntaxHighlighter):

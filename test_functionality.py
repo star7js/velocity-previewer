@@ -5,16 +5,10 @@ Simple test script to verify the core functionality of the VM Visualizer.
 
 import sys
 import os
+from utils import validate_template_syntax, validate_json_data, render_template, create_html_export
 
 # Add the current directory to the path so we can import our modules
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from utils import (
-    validate_template_syntax,
-    validate_json_data,
-    render_template,
-    create_html_export,
-)
 
 
 def test_template_validation():
