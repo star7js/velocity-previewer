@@ -1,6 +1,6 @@
 [project]
 name = "vm-visualizer"
-version = "1.0.0"
+version = "1.0.1"
 description = "A modern, feature-rich PyQt5 application for previewing and rendering Velocity templates with real-time syntax highlighting, validation, and export capabilities."
 readme = "README.md"
 requires-python = ">=3.9"
