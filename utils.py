@@ -162,6 +162,7 @@ def create_html_export(content: str, title: str = "Velocity Template Output") ->
         <div class="metadata">
             <p><strong>Generated:</strong> {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
             <p><strong>Template Engine:</strong> Velocity (Airspeed)</p>
+            <p><strong>Application:</strong> {APP_NAME}</p>
         </div>
         <pre>{content}</pre>
     </div>
