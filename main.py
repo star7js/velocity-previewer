@@ -15,7 +15,6 @@ from PyQt5.QtWidgets import (
     QSplitter,
     QMessageBox,
     QToolBar,
-    QStatusBar,
     QProgressBar,
     QTabWidget,
     QTextBrowser,
