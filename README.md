@@ -1,5 +1,7 @@
 # Velocity Template Previewer
 
+[![CI](https://github.com/star7js/vm-visualizer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/vm-visualizer/actions/workflows/ci.yml)
+
 A modern, feature-rich PyQt5 application for previewing and rendering Velocity templates with real-time syntax highlighting, validation, and export capabilities.
 
 ![Velocity Template Previewer](example-template-render.png)
