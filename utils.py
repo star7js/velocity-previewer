@@ -23,16 +23,16 @@ AUTO_SAVE_INTERVAL = 30000  # 30 seconds
 def validate_template_syntax(template_str: str) -> tuple[bool, Optional[str]]:
     """
     Validate Velocity template syntax.
-    
+
     Args:
         template_str: The template string to validate
-        
+
     Returns:
         Tuple of (is_valid, error_message)
     """
     if not template_str.strip():
         return False, "Template is empty"
-    
+
     try:
         Template(template_str)
         return True, None
@@ -42,19 +42,21 @@ def validate_template_syntax(template_str: str) -> tuple[bool, Optional[str]]:
         return False, f"Unexpected error: {e}"
 
 
-def validate_json_data(data_str: str) -> tuple[bool, Optional[str], Optional[Dict[str, Any]]]:
+def validate_json_data(
+    data_str: str,
+) -> tuple[bool, Optional[str], Optional[Dict[str, Any]]]:
     """
     Validate JSON data syntax and structure.
-    
+
     Args:
         data_str: The JSON string to validate
-        
+
     Returns:
         Tuple of (is_valid, error_message, parsed_data)
     """
     if not data_str.strip():
         return True, None, {}
-    
+
     try:
         data = json.loads(data_str)
         if not isinstance(data, dict):
@@ -66,20 +68,22 @@ def validate_json_data(data_str: str) -> tuple[bool, Optional[str], Optional[Dic
         return False, f"Unexpected error: {e}", None
 
 
-def render_template(template_str: str, context_data: Dict[str, Any]) -> tuple[bool, str]:
+def render_template(
+    template_str: str, context_data: Dict[str, Any]
+) -> tuple[bool, str]:
     """
     Render a Velocity template with the given context data.
-    
+
     Args:
         template_str: The template string to render
         context_data: The context data dictionary
-        
+
     Returns:
         Tuple of (success, result_or_error_message)
     """
     if not template_str.strip():
         return False, "Template is empty. Nothing to render."
-    
+
     try:
         template = Template(template_str)
         rendered = template.merge(context_data)
@@ -93,11 +97,11 @@ def render_template(template_str: str, context_data: Dict[str, Any]) -> tuple[bo
 def create_html_export(content: str, title: str = "Velocity Template Output") -> str:
     """
     Create HTML content for export.
-    
+
     Args:
         content: The content to include in the HTML
         title: The HTML page title
-        
+
     Returns:
         Complete HTML document as string
     """
@@ -168,11 +172,11 @@ def create_html_export(content: str, title: str = "Velocity Template Output") ->
 def format_error_message(error: str, context: str = "") -> str:
     """
     Format error messages for display.
-    
+
     Args:
         error: The error message
         context: Additional context information
-        
+
     Returns:
         Formatted error message
     """
@@ -184,16 +188,17 @@ def format_error_message(error: str, context: str = "") -> str:
 def sanitize_filename(filename: str) -> str:
     """
     Sanitize a filename for safe file operations.
-    
+
     Args:
         filename: The filename to sanitize
-        
+
     Returns:
         Sanitized filename
     """
     import re
+
     # Remove or replace invalid characters
-    sanitized = re.sub(r'[<>:"/\\|?*]', '_', filename)
+    sanitized = re.sub(r'[<>:"/\\|?*]', "_", filename)
     # Remove leading/trailing spaces and dots
-    sanitized = sanitized.strip('. ')
-    return sanitized or "untitled" 
+    sanitized = sanitized.strip(". ")
+    return sanitized or "untitled"
