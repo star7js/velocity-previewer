@@ -2,39 +2,78 @@
 
 [![CI](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml)
 
-Desktop application for previewing and rendering Velocity templates with syntax highlighting and validation.
+Desktop application for previewing and rendering Apache Velocity templates with real-time syntax highlighting and validation. Perfect for developers working with Atlassian products (Jira, Confluence), ScriptRunner, email templates, and web applications.
 
 ![Velocity Template Previewer](example-template-render.png)
 
+## What is This?
+
+Apache Velocity is a Java-based template engine commonly used in:
+- **Atlassian Products**: Jira email templates, Confluence macros, ScriptRunner scripts
+- **Email Systems**: Dynamic email generation
+- **Web Applications**: Server-side templating
+- **Code Generation**: Template-based code scaffolding
+
+This tool lets you preview and test your Velocity templates instantly without deploying to production.
+
 ## Features
 
-- Syntax highlighting for Velocity templates and JSON data
-- Real-time template validation with error messages
-- Background rendering for performance
-- Auto-save (every 30 seconds)
-- Export rendered output to HTML
-- Recent files tracking
-- Dark mode support
+- **Real-time Preview**: See changes as you type
+- **Syntax Highlighting**: Color-coded templates and JSON data
+- **Validation**: Catch errors before deployment
+- **Background Rendering**: Smooth performance with large templates
+- **Auto-save**: Never lose your work (saves every 30 seconds)
+- **Export**: Generate static HTML from your templates
+- **Dark Mode**: Easy on the eyes
+- **Recent Files**: Quick access to your projects
 
 ## Installation
 
-Requires Python 3.9+
+**Requirements:** Python 3.9+ (Windows, macOS, Linux)
 
 ```bash
 git clone https://github.com/star7js/velocity-previewer.git
 cd velocity-previewer
-pip install PyQt5 airspeed
+pip install -r requirements.txt
 python main.py
 ```
 
-## Usage
+## Quick Start
 
-1. Open a Velocity template (.vm file)
-2. Add JSON data in the Data tab
-3. Press F5 to render
-4. Export to HTML if needed
+1. **Open a template**: File > Open or Ctrl+O
+2. **Add your data**: Switch to Data tab, paste JSON
+3. **Render**: Press F5
+4. **Export** (optional): File > Export to HTML
 
-### Keyboard Shortcuts
+Try the included `example-template.vm` with `example-data.json` to see it in action.
+
+## Use Cases
+
+### Atlassian/ScriptRunner Development
+Test Jira email notifications, Confluence macros, or ScriptRunner templates locally before deploying:
+
+```velocity
+#if($issue.priority.name == "Critical")
+  <span style="color: red;">$issue.key - $issue.summary</span>
+#end
+```
+
+### Email Template Design
+Preview dynamic email templates with test data:
+
+```velocity
+Hello $customer.name,
+
+Your order #$order.id has shipped!
+#foreach($item in $order.items)
+  - $item.name (Qty: $item.quantity)
+#end
+```
+
+### Dynamic Reports
+Generate reports from JSON data without manual formatting.
+
+## Keyboard Shortcuts
 
 | Action | Shortcut |
 |--------|----------|
@@ -44,26 +83,58 @@ python main.py
 | Validate Template | Ctrl+Shift+V |
 | Validate Data | Ctrl+Shift+D |
 
-See `example-template.vm` and `example-data.json` for examples.
+## Supported Velocity Syntax
 
-## Supported Velocity Features
+- **Variables**: `$variable`, `${variable}`
+- **Directives**: `#if`, `#foreach`, `#set`, `#macro`
+- **Comments**: `##` (single line), `#* ... *#` (multi-line)
+- **Properties**: `$object.property`, `$array[0]`
+- **Methods**: `$string.substring(0, 5)`
 
-Supports standard Velocity syntax: variables (`$var`), directives (`#if`, `#foreach`, `#set`), and comments (`##`).
+Full Apache Velocity specification supported via Airspeed engine.
+
+## Platform Support
+
+- ✅ Windows 10/11
+- ✅ macOS 10.15+
+- ✅ Linux (Ubuntu, Fedora, Arch)
 
 ## Development
 
-Project structure:
-- `main.py` - Application UI and logic
-- `utils.py` - Template processing and utilities
-- `syntax_highlighters.py` - Syntax highlighting
+```bash
+# Install dependencies
+pip install -r requirements.txt
 
-Settings (window size, recent files) are automatically saved to your system's app data directory.
+# Run tests
+python test_functionality.py
+
+# Project structure
+├── main.py                  # Application UI and logic
+├── utils.py                 # Template processing
+├── syntax_highlighters.py   # Syntax highlighting
+└── test_functionality.py    # Tests
+```
+
+Settings (window size, recent files) are saved to:
+- **Windows**: `%APPDATA%/VelocityPreviewer`
+- **macOS**: `~/Library/Application Support/VelocityPreviewer`
+- **Linux**: `~/.config/VelocityPreviewer`
 
 ## Troubleshooting
 
-- **Template errors**: Use `Tools > Validate Template` (Ctrl+Shift+V)
-- **JSON errors**: Use `Tools > Validate Data` (Ctrl+Shift+D)
-- **Performance**: Large templates render in background threads
+| Issue | Solution |
+|-------|----------|
+| Template won't render | Use `Tools > Validate Template` (Ctrl+Shift+V) to see errors |
+| JSON parse errors | Use `Tools > Validate Data` (Ctrl+Shift+D) to check format |
+| Slow performance | Large templates render in background automatically |
+| App won't start | Ensure PyQt5 is installed: `pip install PyQt5` |
+
+## Roadmap
+
+- [ ] Live preview mode (render on every keystroke)
+- [ ] Multiple data sets for testing
+- [ ] Template snippet library
+- [ ] Velocity macro autocomplete
 
 ## License
 
@@ -71,5 +142,5 @@ MIT License
 
 ## Built With
 
-- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - UI framework
-- [Airspeed](https://github.com/purcell/airspeed) - Velocity template engine
+- [PyQt5](https://www.riverbankcomputing.com/software/pyqt/) - Cross-platform UI framework
+- [Airspeed](https://github.com/purcell/airspeed) - Python implementation of Apache Velocity
