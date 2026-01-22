@@ -9,7 +9,6 @@ from datetime import datetime
 from typing import Dict, Any, Optional, Tuple
 from airspeed import Template, TemplateError
 
-
 # --- Constants ---
 APP_NAME = "Velocity Template Previewer"
 DEFAULT_WINDOW_WIDTH = 1200
