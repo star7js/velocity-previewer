@@ -111,7 +111,7 @@ def create_html_export(content: str, title: str = "Velocity Template Output") ->
     # Escape content and title to prevent XSS
     escaped_content = html.escape(content)
     escaped_title = html.escape(title)
-    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     return f"""<!DOCTYPE html>
 <html lang="en">

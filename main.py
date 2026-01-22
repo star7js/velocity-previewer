@@ -540,12 +540,16 @@ class VelocityTemplatePreviewer(QMainWindow):
                 self._current_template_file_path = fileName
                 self._update_window_title()
                 self._add_to_recent_files(fileName)
-                self.statusBar().showMessage(f"Template '{fileName}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Template '{fileName}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG
+                )
             except IOError as e:
                 QMessageBox.critical(
                     self, "Error Opening File", f"Could not open template file:\n{e}"
                 )
-                self.statusBar().showMessage(f"Error opening template: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Error opening template: {e}", STATUS_MESSAGE_TIMEOUT_LONG
+                )
 
     def open_data_file(self):
         fileName, _ = QFileDialog.getOpenFileName(
@@ -556,12 +560,16 @@ class VelocityTemplatePreviewer(QMainWindow):
                 with open(fileName, "r", encoding="utf-8") as file:
                     self.dataEditor.setText(file.read())
                 self._current_data_file_path = fileName
-                self.statusBar().showMessage(f"Data file '{fileName}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Data file '{fileName}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG
+                )
             except IOError as e:
                 QMessageBox.critical(
                     self, "Error Opening File", f"Could not open data file:\n{e}"
                 )
-                self.statusBar().showMessage(f"Error opening data file: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Error opening data file: {e}", STATUS_MESSAGE_TIMEOUT_LONG
+                )
 
     def _save_template_to_path(self, file_path: str, silent: bool = False) -> bool:
         if not file_path:
@@ -572,13 +580,17 @@ class VelocityTemplatePreviewer(QMainWindow):
             self._current_template_file_path = file_path
             self._update_window_title()
             if not silent:
-                self.statusBar().showMessage(f"Template saved to '{file_path}'.", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Template saved to '{file_path}'.", STATUS_MESSAGE_TIMEOUT_LONG
+                )
             return True
         except IOError as e:
             QMessageBox.critical(
                 self, "Error Saving File", f"Could not save template file:\n{e}"
             )
-            self.statusBar().showMessage(f"Error saving template: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
+            self.statusBar().showMessage(
+                f"Error saving template: {e}", STATUS_MESSAGE_TIMEOUT_LONG
+            )
             return False
 
     def save_template_file(self):
@@ -609,16 +621,22 @@ class VelocityTemplatePreviewer(QMainWindow):
             try:
                 with open(fileName, "w", encoding="utf-8") as file:
                     file.write(self.outputViewer.toPlainText())
-                self.statusBar().showMessage(f"Output saved to '{fileName}'.", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Output saved to '{fileName}'.", STATUS_MESSAGE_TIMEOUT_LONG
+                )
             except IOError as e:
                 QMessageBox.critical(
                     self, "Error Saving File", f"Could not save output file:\n{e}"
                 )
-                self.statusBar().showMessage(f"Error saving output: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"Error saving output: {e}", STATUS_MESSAGE_TIMEOUT_LONG
+                )
 
     def clear_data_editor(self):
         self.dataEditor.clear()
-        self.statusBar().showMessage("Data editor cleared.", STATUS_MESSAGE_TIMEOUT_SHORT)
+        self.statusBar().showMessage(
+            "Data editor cleared.", STATUS_MESSAGE_TIMEOUT_SHORT
+        )
 
     def render_template(self):
         """Render the template with the provided data."""
@@ -626,7 +644,9 @@ class VelocityTemplatePreviewer(QMainWindow):
         data_str = self.dataEditor.toPlainText()
         if not template_str.strip():
             self.outputViewer.setText("Template is empty. Nothing to render.")
-            self.statusBar().showMessage("Render attempted with empty template.", STATUS_MESSAGE_TIMEOUT_SHORT)
+            self.statusBar().showMessage(
+                "Render attempted with empty template.", STATUS_MESSAGE_TIMEOUT_SHORT
+            )
             return
         # Validate JSON data
         is_valid, error_message, context_data = validate_json_data(data_str)
@@ -634,7 +654,9 @@ class VelocityTemplatePreviewer(QMainWindow):
             self.outputViewer.setText(
                 format_error_message(error_message, "JSON Data Error")
             )
-            self.statusBar().showMessage("JSON Data Error.", STATUS_MESSAGE_TIMEOUT_LONG)
+            self.statusBar().showMessage(
+                "JSON Data Error.", STATUS_MESSAGE_TIMEOUT_LONG
+            )
             return
         if context_data is None:
             context_data = {}
@@ -686,7 +708,9 @@ class VelocityTemplatePreviewer(QMainWindow):
         try:
             self.outputViewer.setText(rendered_text)
             self.statusLabel.setText("Template rendered successfully")
-            self.statusBar().showMessage("Template rendered successfully.", STATUS_MESSAGE_TIMEOUT_SHORT)
+            self.statusBar().showMessage(
+                "Template rendered successfully.", STATUS_MESSAGE_TIMEOUT_SHORT
+            )
         except Exception as e:
             self.statusLabel.setText(f"Error displaying rendered output: {e}")
 
@@ -695,7 +719,9 @@ class VelocityTemplatePreviewer(QMainWindow):
         try:
             self.outputViewer.setText(error_message)
             self.statusLabel.setText("Rendering failed")
-            self.statusBar().showMessage("Template Rendering Error.", STATUS_MESSAGE_TIMEOUT_LONG)
+            self.statusBar().showMessage(
+                "Template Rendering Error.", STATUS_MESSAGE_TIMEOUT_LONG
+            )
         except Exception as e:
             self.statusLabel.setText(f"Error displaying error message: {e}")
 
@@ -749,7 +775,9 @@ class VelocityTemplatePreviewer(QMainWindow):
                 html_content = create_html_export(self.outputViewer.toPlainText())
                 with open(fileName, "w", encoding="utf-8") as file:
                     file.write(html_content)
-                self.statusBar().showMessage(f"HTML exported to '{fileName}'.", STATUS_MESSAGE_TIMEOUT_LONG)
+                self.statusBar().showMessage(
+                    f"HTML exported to '{fileName}'.", STATUS_MESSAGE_TIMEOUT_LONG
+                )
             except IOError as e:
                 QMessageBox.critical(
                     self, "Export Error", f"Could not export HTML file:\n{e}"
@@ -758,12 +786,16 @@ class VelocityTemplatePreviewer(QMainWindow):
     def clear_template_editor(self):
         """Clear the template editor."""
         self.templateEditor.clear()
-        self.statusBar().showMessage("Template editor cleared.", STATUS_MESSAGE_TIMEOUT_SHORT)
+        self.statusBar().showMessage(
+            "Template editor cleared.", STATUS_MESSAGE_TIMEOUT_SHORT
+        )
 
     def clear_output_viewer(self):
         """Clear the output viewer."""
         self.outputViewer.clear()
-        self.statusBar().showMessage("Output viewer cleared.", STATUS_MESSAGE_TIMEOUT_SHORT)
+        self.statusBar().showMessage(
+            "Output viewer cleared.", STATUS_MESSAGE_TIMEOUT_SHORT
+        )
 
     def _update_recent_files_menu(self):
         """Update the recent files menu."""
@@ -797,7 +829,9 @@ class VelocityTemplatePreviewer(QMainWindow):
             self._current_template_file_path = file_path
             self._update_window_title()
             self._add_to_recent_files(file_path)
-            self.statusBar().showMessage(f"Recent file '{file_path}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG)
+            self.statusBar().showMessage(
+                f"Recent file '{file_path}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG
+            )
         except IOError as e:
             QMessageBox.critical(
                 self, "Error Opening File", f"Could not open recent file:\n{e}"
