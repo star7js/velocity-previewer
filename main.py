@@ -273,8 +273,7 @@ class VelocityTemplatePreviewer(QMainWindow):
     def _apply_styling_unsafe(self):
         """Apply modern styling to the application (unsafe version without error handling)."""
         if self._dark_mode:
-            self.setStyleSheet(
-                """
+            self.setStyleSheet("""
                 QMainWindow {
                     background-color: #23272e;
                 }
@@ -324,11 +323,9 @@ class VelocityTemplatePreviewer(QMainWindow):
                     background: #23272e;
                     color: #eee;
                 }
-            """
-            )
+            """)
         else:
-            self.setStyleSheet(
-                """
+            self.setStyleSheet("""
                 QMainWindow {
                     background-color: #f5f5f5;
                 }
@@ -378,8 +375,7 @@ class VelocityTemplatePreviewer(QMainWindow):
                     background: #f5f5f5;
                     color: #222;
                 }
-            """
-            )
+            """)
 
     def _get_stock_icon(self, standard_icon_enum) -> QIcon:
         return self.style().standardIcon(standard_icon_enum)
