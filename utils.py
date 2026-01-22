@@ -2,8 +2,11 @@
 Utility functions and constants for the Velocity Template Previewer.
 """
 
+import html
 import json
-from typing import Dict, Any, Optional
+import re
+from datetime import datetime
+from typing import Dict, Any, Optional, Tuple
 from airspeed import Template, TemplateError
 
 
@@ -20,7 +23,7 @@ HTML_FILE_FILTER = "HTML Files (*.html);;All Files (*)"
 AUTO_SAVE_INTERVAL = 30000  # 30 seconds
 
 
-def validate_template_syntax(template_str: str) -> tuple[bool, Optional[str]]:
+def validate_template_syntax(template_str: str) -> Tuple[bool, Optional[str]]:
     """
     Validate Velocity template syntax.
 
@@ -44,7 +47,7 @@ def validate_template_syntax(template_str: str) -> tuple[bool, Optional[str]]:
 
 def validate_json_data(
     data_str: str,
-) -> tuple[bool, Optional[str], Optional[Dict[str, Any]]]:
+) -> Tuple[bool, Optional[str], Optional[Dict[str, Any]]]:
     """
     Validate JSON data syntax and structure.
 
@@ -70,7 +73,7 @@ def validate_json_data(
 
 def render_template(
     template_str: str, context_data: Dict[str, Any]
-) -> tuple[bool, str]:
+) -> Tuple[bool, str]:
     """
     Render a Velocity template with the given context data.
 
@@ -105,12 +108,17 @@ def create_html_export(content: str, title: str = "Velocity Template Output") ->
     Returns:
         Complete HTML document as string
     """
+    # Escape content and title to prevent XSS
+    escaped_content = html.escape(content)
+    escaped_title = html.escape(title)
+    current_time = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     return f"""<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{title}</title>
+    <title>{escaped_title}</title>
     <style>
         body {{
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -158,13 +166,13 @@ def create_html_export(content: str, title: str = "Velocity Template Output") ->
 </head>
 <body>
     <div class="container">
-        <h1>{title}</h1>
+        <h1>{escaped_title}</h1>
         <div class="metadata">
-            <p><strong>Generated:</strong> {__import__('datetime').datetime.now().strftime('%Y-%m-%d %H:%M:%S')}</p>
+            <p><strong>Generated:</strong> {current_time}</p>
             <p><strong>Template Engine:</strong> Velocity (Airspeed)</p>
             <p><strong>Application:</strong> {APP_NAME}</p>
         </div>
-        <pre>{content}</pre>
+        <pre>{escaped_content}</pre>
     </div>
 </body>
 </html>"""
@@ -196,8 +204,6 @@ def sanitize_filename(filename: str) -> str:
     Returns:
         Sanitized filename
     """
-    import re
-
     # Remove or replace invalid characters
     sanitized = re.sub(r'[<>:"/\\|?*]', "_", filename)
     # Remove leading/trailing spaces and dots
