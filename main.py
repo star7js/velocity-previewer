@@ -20,7 +20,7 @@ from PyQt5.QtWidgets import (
     QTextBrowser,
 )
 from PyQt5.QtCore import Qt, QSize, QTimer, QSettings, QThread, pyqtSignal
-from PyQt5.QtGui import QIcon, QKeySequence, QFont, QColor
+from PyQt5.QtGui import QIcon, QKeySequence, QFont
 from datetime import datetime
 
 # Import our modules
@@ -45,7 +45,13 @@ from syntax_highlighters import (
     OutputSyntaxHighlighter,
 )
 
+# UI Constants
 DEFAULT_FONT = "Menlo"  # macOS native monospace font
+DEFAULT_FONT_SIZE = 11
+DEFAULT_BUTTON_HEIGHT = 40
+MAX_RECENT_FILES = 10
+STATUS_MESSAGE_TIMEOUT_SHORT = 3000  # milliseconds
+STATUS_MESSAGE_TIMEOUT_LONG = 5000  # milliseconds
 
 
 class TemplateRenderer(QThread):
@@ -90,7 +96,7 @@ class VelocityTemplatePreviewer(QMainWindow):
 
     def _save_settings(self):
         """Save application settings."""
-        self._settings.setValue("recent_files", self._recent_files[:10])  # Keep last 10
+        self._settings.setValue("recent_files", self._recent_files[:MAX_RECENT_FILES])
         self._settings.setValue("window_geometry", self.saveGeometry())
         self._settings.setValue("splitter_sizes", self.mainSplitter.saveState())
 
@@ -127,23 +133,17 @@ class VelocityTemplatePreviewer(QMainWindow):
         self.statusBar().showMessage("Ready")
 
     def _create_widgets(self):
-        """Create and configure UI widgets."""
+        """Create and configure all UI widgets including editors, buttons, and viewers."""
         # Template editor with syntax highlighting
         self.templateEditor = QTextEdit()
         self.templateEditor.setPlaceholderText(
             "Enter your Velocity Template (.vm) code here..."
         )
         self.templateEditor.setAcceptRichText(False)
-        self.templateEditor.setFont(QFont(DEFAULT_FONT, 11))
+        self.templateEditor.setFont(QFont(DEFAULT_FONT, DEFAULT_FONT_SIZE))
         self.templateHighlighter = VelocitySyntaxHighlighter(
             self.templateEditor.document()
         )
-        # Explicit palette for text color
-        pal = self.templateEditor.palette()
-        pal.setColor(self.templateEditor.backgroundRole(), QColor("#ffffff"))
-        pal.setColor(self.templateEditor.foregroundRole(), QColor("#222222"))
-        self.templateEditor.setPalette(pal)
-        self.templateEditor.setStyleSheet("color: #222; background: #fff;")
 
         # Data editor with JSON syntax highlighting
         self.dataEditor = QTextEdit()
@@ -151,32 +151,22 @@ class VelocityTemplatePreviewer(QMainWindow):
             'Enter JSON data for the template here...\nExample: {"name": "World", "items": [1, 2, 3]}'
         )
         self.dataEditor.setAcceptRichText(False)
-        self.dataEditor.setFont(QFont(DEFAULT_FONT, 11))
+        self.dataEditor.setFont(QFont(DEFAULT_FONT, DEFAULT_FONT_SIZE))
         self.jsonHighlighter = JSONSyntaxHighlighter(self.dataEditor.document())
-        pal = self.dataEditor.palette()
-        pal.setColor(self.dataEditor.backgroundRole(), QColor("#ffffff"))
-        pal.setColor(self.dataEditor.foregroundRole(), QColor("#222222"))
-        self.dataEditor.setPalette(pal)
-        self.dataEditor.setStyleSheet("color: #222; background: #fff;")
 
         # Output viewer with better formatting
         self.outputViewer = QTextBrowser()
         self.outputViewer.setPlaceholderText("Rendered output will appear here.")
-        self.outputViewer.setFont(QFont(DEFAULT_FONT, 11))
+        self.outputViewer.setFont(QFont(DEFAULT_FONT, DEFAULT_FONT_SIZE))
         self.outputViewer.setOpenExternalLinks(True)
         self.outputHighlighter = OutputSyntaxHighlighter(self.outputViewer.document())
-        pal = self.outputViewer.palette()
-        pal.setColor(self.outputViewer.backgroundRole(), QColor("#ffffff"))
-        pal.setColor(self.outputViewer.foregroundRole(), QColor("#222222"))
-        self.outputViewer.setPalette(pal)
-        self.outputViewer.setStyleSheet("color: #222; background: #fff;")
 
         # Buttons with better styling
         self.renderButton = QPushButton("Render Template")
         self.renderButton.setIcon(
             self._get_stock_icon(QApplication.style().SP_MediaPlay)
         )
-        self.renderButton.setMinimumHeight(40)
+        self.renderButton.setMinimumHeight(DEFAULT_BUTTON_HEIGHT)
 
         self.clearDataButton = QPushButton("Clear Data")
         self.clearDataButton.setIcon(
@@ -188,7 +178,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         self.progressBar.setVisible(False)
 
     def _create_layouts(self):
-        """Create the main layout with improved organization."""
+        """Create the main layout with splitters and organize widgets into tabs."""
         # Main horizontal splitter
         self.mainSplitter = QSplitter(Qt.Horizontal)
 
@@ -274,6 +264,14 @@ class VelocityTemplatePreviewer(QMainWindow):
 
     def _apply_styling(self):
         """Apply modern styling to the application."""
+        try:
+            self._apply_styling_unsafe()
+        except Exception as e:
+            # If styling fails, log the error but continue with default styling
+            print(f"Warning: Failed to apply custom styling: {e}")
+
+    def _apply_styling_unsafe(self):
+        """Apply modern styling to the application (unsafe version without error handling)."""
         if self._dark_mode:
             self.setStyleSheet(
                 """
@@ -387,6 +385,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         return self.style().standardIcon(standard_icon_enum)
 
     def _create_menu_bar(self):
+        """Create the menu bar with File, Edit, Tools, and Help menus."""
         menuBar = self.menuBar()
 
         # File menu
@@ -487,6 +486,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         helpMenu.addAction(aboutAction)
 
     def _create_toolbar(self):
+        """Create the main toolbar with quick access buttons."""
         toolbar = QToolBar("Main Toolbar")
         toolbar.setIconSize(QSize(16, 16))  # Smaller icons for toolbar
         self.addToolBar(toolbar)
@@ -497,6 +497,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         toolbar.addAction(self.renderAction)
 
     def _connect_signals(self):
+        """Connect all UI signals to their respective handler methods."""
         # File actions
         self.openTemplateAction.triggered.connect(self.open_template_file)
         self.openDataAction.triggered.connect(self.open_data_file)
@@ -539,12 +540,12 @@ class VelocityTemplatePreviewer(QMainWindow):
                 self._current_template_file_path = fileName
                 self._update_window_title()
                 self._add_to_recent_files(fileName)
-                self.statusBar().showMessage(f"Template '{fileName}' loaded.", 5000)
+                self.statusBar().showMessage(f"Template '{fileName}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG)
             except IOError as e:
                 QMessageBox.critical(
                     self, "Error Opening File", f"Could not open template file:\n{e}"
                 )
-                self.statusBar().showMessage(f"Error opening template: {e}", 5000)
+                self.statusBar().showMessage(f"Error opening template: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
 
     def open_data_file(self):
         fileName, _ = QFileDialog.getOpenFileName(
@@ -555,12 +556,12 @@ class VelocityTemplatePreviewer(QMainWindow):
                 with open(fileName, "r", encoding="utf-8") as file:
                     self.dataEditor.setText(file.read())
                 self._current_data_file_path = fileName
-                self.statusBar().showMessage(f"Data file '{fileName}' loaded.", 5000)
+                self.statusBar().showMessage(f"Data file '{fileName}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG)
             except IOError as e:
                 QMessageBox.critical(
                     self, "Error Opening File", f"Could not open data file:\n{e}"
                 )
-                self.statusBar().showMessage(f"Error opening data file: {e}", 5000)
+                self.statusBar().showMessage(f"Error opening data file: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
 
     def _save_template_to_path(self, file_path: str, silent: bool = False) -> bool:
         if not file_path:
@@ -571,13 +572,13 @@ class VelocityTemplatePreviewer(QMainWindow):
             self._current_template_file_path = file_path
             self._update_window_title()
             if not silent:
-                self.statusBar().showMessage(f"Template saved to '{file_path}'.", 5000)
+                self.statusBar().showMessage(f"Template saved to '{file_path}'.", STATUS_MESSAGE_TIMEOUT_LONG)
             return True
         except IOError as e:
             QMessageBox.critical(
                 self, "Error Saving File", f"Could not save template file:\n{e}"
             )
-            self.statusBar().showMessage(f"Error saving template: {e}", 5000)
+            self.statusBar().showMessage(f"Error saving template: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
             return False
 
     def save_template_file(self):
@@ -608,16 +609,16 @@ class VelocityTemplatePreviewer(QMainWindow):
             try:
                 with open(fileName, "w", encoding="utf-8") as file:
                     file.write(self.outputViewer.toPlainText())
-                self.statusBar().showMessage(f"Output saved to '{fileName}'.", 5000)
+                self.statusBar().showMessage(f"Output saved to '{fileName}'.", STATUS_MESSAGE_TIMEOUT_LONG)
             except IOError as e:
                 QMessageBox.critical(
                     self, "Error Saving File", f"Could not save output file:\n{e}"
                 )
-                self.statusBar().showMessage(f"Error saving output: {e}", 5000)
+                self.statusBar().showMessage(f"Error saving output: {e}", STATUS_MESSAGE_TIMEOUT_LONG)
 
     def clear_data_editor(self):
         self.dataEditor.clear()
-        self.statusBar().showMessage("Data editor cleared.", 3000)
+        self.statusBar().showMessage("Data editor cleared.", STATUS_MESSAGE_TIMEOUT_SHORT)
 
     def render_template(self):
         """Render the template with the provided data."""
@@ -625,7 +626,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         data_str = self.dataEditor.toPlainText()
         if not template_str.strip():
             self.outputViewer.setText("Template is empty. Nothing to render.")
-            self.statusBar().showMessage("Render attempted with empty template.", 3000)
+            self.statusBar().showMessage("Render attempted with empty template.", STATUS_MESSAGE_TIMEOUT_SHORT)
             return
         # Validate JSON data
         is_valid, error_message, context_data = validate_json_data(data_str)
@@ -633,7 +634,7 @@ class VelocityTemplatePreviewer(QMainWindow):
             self.outputViewer.setText(
                 format_error_message(error_message, "JSON Data Error")
             )
-            self.statusBar().showMessage("JSON Data Error.", 5000)
+            self.statusBar().showMessage("JSON Data Error.", STATUS_MESSAGE_TIMEOUT_LONG)
             return
         if context_data is None:
             context_data = {}
@@ -663,6 +664,11 @@ class VelocityTemplatePreviewer(QMainWindow):
                 "skills": [],
                 "experience": [],
             }
+
+        # Clean up any existing thread before starting a new one
+        if self._renderer_thread is not None and self._renderer_thread.isRunning():
+            self._renderer_thread.wait()
+
         # Show progress and disable render button
         self.progressBar.setVisible(True)
         self.progressBar.setRange(0, 0)  # Indeterminate progress
@@ -677,21 +683,33 @@ class VelocityTemplatePreviewer(QMainWindow):
 
     def _on_template_rendered(self, rendered_text: str):
         """Handle successful template rendering."""
-        self.outputViewer.setText(rendered_text)
-        self.statusLabel.setText("Template rendered successfully")
-        self.statusBar().showMessage("Template rendered successfully.", 3000)
+        try:
+            self.outputViewer.setText(rendered_text)
+            self.statusLabel.setText("Template rendered successfully")
+            self.statusBar().showMessage("Template rendered successfully.", STATUS_MESSAGE_TIMEOUT_SHORT)
+        except Exception as e:
+            self.statusLabel.setText(f"Error displaying rendered output: {e}")
 
     def _on_template_error(self, error_message: str):
         """Handle template rendering error."""
-        self.outputViewer.setText(error_message)
-        self.statusLabel.setText("Rendering failed")
-        self.statusBar().showMessage("Template Rendering Error.", 5000)
+        try:
+            self.outputViewer.setText(error_message)
+            self.statusLabel.setText("Rendering failed")
+            self.statusBar().showMessage("Template Rendering Error.", STATUS_MESSAGE_TIMEOUT_LONG)
+        except Exception as e:
+            self.statusLabel.setText(f"Error displaying error message: {e}")
 
     def _on_render_finished(self):
         """Handle render thread completion."""
-        self.progressBar.setVisible(False)
-        self.renderButton.setEnabled(True)
-        self._renderer_thread = None
+        try:
+            self.progressBar.setVisible(False)
+            self.renderButton.setEnabled(True)
+            # Properly clean up the thread reference
+            if self._renderer_thread is not None:
+                self._renderer_thread.wait()
+                self._renderer_thread = None
+        except Exception as e:
+            self.statusLabel.setText(f"Error finishing render: {e}")
 
     def validate_template(self):
         """Validate the current template syntax."""
@@ -731,7 +749,7 @@ class VelocityTemplatePreviewer(QMainWindow):
                 html_content = create_html_export(self.outputViewer.toPlainText())
                 with open(fileName, "w", encoding="utf-8") as file:
                     file.write(html_content)
-                self.statusBar().showMessage(f"HTML exported to '{fileName}'.", 5000)
+                self.statusBar().showMessage(f"HTML exported to '{fileName}'.", STATUS_MESSAGE_TIMEOUT_LONG)
             except IOError as e:
                 QMessageBox.critical(
                     self, "Export Error", f"Could not export HTML file:\n{e}"
@@ -740,12 +758,12 @@ class VelocityTemplatePreviewer(QMainWindow):
     def clear_template_editor(self):
         """Clear the template editor."""
         self.templateEditor.clear()
-        self.statusBar().showMessage("Template editor cleared.", 3000)
+        self.statusBar().showMessage("Template editor cleared.", STATUS_MESSAGE_TIMEOUT_SHORT)
 
     def clear_output_viewer(self):
         """Clear the output viewer."""
         self.outputViewer.clear()
-        self.statusBar().showMessage("Output viewer cleared.", 3000)
+        self.statusBar().showMessage("Output viewer cleared.", STATUS_MESSAGE_TIMEOUT_SHORT)
 
     def _update_recent_files_menu(self):
         """Update the recent files menu."""
@@ -779,7 +797,7 @@ class VelocityTemplatePreviewer(QMainWindow):
             self._current_template_file_path = file_path
             self._update_window_title()
             self._add_to_recent_files(file_path)
-            self.statusBar().showMessage(f"Recent file '{file_path}' loaded.", 5000)
+            self.statusBar().showMessage(f"Recent file '{file_path}' loaded.", STATUS_MESSAGE_TIMEOUT_LONG)
         except IOError as e:
             QMessageBox.critical(
                 self, "Error Opening File", f"Could not open recent file:\n{e}"
@@ -790,7 +808,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         if file_path in self._recent_files:
             self._recent_files.remove(file_path)
         self._recent_files.insert(0, file_path)
-        self._recent_files = self._recent_files[:10]  # Keep only last 10
+        self._recent_files = self._recent_files[:MAX_RECENT_FILES]
         self._update_recent_files_menu()
 
     def _clear_recent_files(self):
@@ -820,6 +838,9 @@ class VelocityTemplatePreviewer(QMainWindow):
 
     def closeEvent(self, event):
         """Handle application close event."""
+        # Clean up any running threads before closing
+        if self._renderer_thread is not None and self._renderer_thread.isRunning():
+            self._renderer_thread.wait()
         self._save_settings()
         event.accept()
 
