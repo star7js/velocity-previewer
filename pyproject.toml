@@ -1,6 +1,6 @@
 [project]
-name = "vm-visualizer"
-version = "1.0.1"
+name = "velocity-previewer"
+version = "1.0.2"
 description = "A modern, feature-rich PyQt5 application for previewing and rendering Velocity templates with real-time syntax highlighting, validation, and export capabilities."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -37,13 +37,13 @@ dev = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/vm-visualizer"
-Repository = "https://github.com/yourusername/vm-visualizer"
-Documentation = "https://github.com/yourusername/vm-visualizer#readme"
-Issues = "https://github.com/yourusername/vm-visualizer/issues"
+Homepage = "https://github.com/star7js/velocity-previewer"
+Repository = "https://github.com/star7js/velocity-previewer"
+Documentation = "https://github.com/star7js/velocity-previewer#readme"
+Issues = "https://github.com/star7js/velocity-previewer/issues"
 
 [project.scripts]
-vm-visualizer = "main:main"
+velocity-previewer = "main:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]

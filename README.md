@@ -1,6 +1,6 @@
 # Velocity Template Previewer
 
-[![CI](https://github.com/star7js/vm-visualizer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/vm-visualizer/actions/workflows/ci.yml)
+[![CI](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml)
 
 Desktop application for previewing and rendering Velocity templates with syntax highlighting and validation.
 
@@ -21,8 +21,8 @@ Desktop application for previewing and rendering Velocity templates with syntax 
 Requires Python 3.9+
 
 ```bash
-git clone https://github.com/star7js/vm-visualizer.git
-cd vm-visualizer
+git clone https://github.com/star7js/velocity-previewer.git
+cd velocity-previewer
 pip install PyQt5 airspeed
 python main.py
 ```
