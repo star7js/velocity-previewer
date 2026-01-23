@@ -24,7 +24,7 @@ from PyQt5.QtGui import QIcon, QKeySequence, QFont
 from datetime import datetime
 
 # Import our modules
-from utils import (
+from .utils import (
     APP_NAME,
     DEFAULT_WINDOW_WIDTH,
     DEFAULT_WINDOW_HEIGHT,
@@ -39,7 +39,7 @@ from utils import (
     create_html_export,
     format_error_message,
 )
-from syntax_highlighters import (
+from .syntax_highlighters import (
     VelocitySyntaxHighlighter,
     JSONSyntaxHighlighter,
     OutputSyntaxHighlighter,
