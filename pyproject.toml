@@ -1,6 +1,6 @@
 [project]
 name = "velocity-previewer"
-version = "1.0.2"
+version = "1.1.0"
 description = "A modern, feature-rich PyQt5 application for previewing and rendering Velocity templates with real-time syntax highlighting, validation, and export capabilities."
 readme = "README.md"
 requires-python = ">=3.9"
@@ -43,15 +43,15 @@ Documentation = "https://github.com/star7js/velocity-previewer#readme"
 Issues = "https://github.com/star7js/velocity-previewer/issues"
 
 [project.scripts]
-velocity-previewer = "main:main"
+velocity-previewer = "velocity_previewer.main:main"
 
 [build-system]
 requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
-where = ["."]
-include = ["*"]
+where = ["src"]
+include = ["velocity_previewer*"]
 exclude = ["tests*", "docs*"]
 
 [tool.black]
