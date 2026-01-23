@@ -26,19 +26,19 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install airspeed pyqt5 black flake8
+        pip install -e .
 
     - name: Lint with black
       run: |
-        black --check .
+        black --check src/ tests/
 
     - name: Lint with flake8
       run: |
-        flake8 . --max-line-length=120
+        flake8 src/ tests/ --max-line-length=88 --extend-ignore=E203,W503
 
     - name: Run functionality tests
       run: |
-        python test_functionality.py
+        python tests/test_functionality.py
 
     # (Optional) Build wheel and sdist
     - name: Build package
