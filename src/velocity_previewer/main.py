@@ -133,7 +133,8 @@ class VelocityTemplatePreviewer(QMainWindow):
         self.statusBar().showMessage("Ready")
 
     def _create_widgets(self):
-        """Create and configure all UI widgets including editors, buttons, and viewers."""
+        """Create and configure all UI widgets including editors,
+        buttons, and viewers."""
         # Template editor with syntax highlighting
         self.templateEditor = QTextEdit()
         self.templateEditor.setPlaceholderText(
@@ -148,7 +149,8 @@ class VelocityTemplatePreviewer(QMainWindow):
         # Data editor with JSON syntax highlighting
         self.dataEditor = QTextEdit()
         self.dataEditor.setPlaceholderText(
-            'Enter JSON data for the template here...\nExample: {"name": "World", "items": [1, 2, 3]}'
+            'Enter JSON data for the template here...\n'
+            'Example: {"name": "World", "items": [1, 2, 3]}'
         )
         self.dataEditor.setAcceptRichText(False)
         self.dataEditor.setFont(QFont(DEFAULT_FONT, DEFAULT_FONT_SIZE))
@@ -271,7 +273,8 @@ class VelocityTemplatePreviewer(QMainWindow):
             print(f"Warning: Failed to apply custom styling: {e}")
 
     def _apply_styling_unsafe(self):
-        """Apply modern styling to the application (unsafe version without error handling)."""
+        """Apply modern styling to the application
+        (unsafe version without error handling)."""
         if self._dark_mode:
             self.setStyleSheet("""
                 QMainWindow {
@@ -853,7 +856,8 @@ class VelocityTemplatePreviewer(QMainWindow):
             "About Velocity Template Previewer",
             """<h3>Velocity Template Previewer</h3>
             <p>Version 1.0</p>
-            <p>A modern PyQt5 application for previewing and rendering Velocity templates.</p>
+            <p>A modern PyQt5 application for previewing and rendering
+            Velocity templates.</p>
             <p>Features:</p>
             <ul>
                 <li>Syntax highlighting for Velocity templates and JSON data</li>

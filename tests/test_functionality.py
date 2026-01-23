@@ -7,9 +7,11 @@ import sys
 import os
 
 # Add the src directory to the path
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'src'))
+sys.path.insert(
+    0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "src")
+)
 
-from velocity_previewer.utils import (
+from velocity_previewer.utils import (  # noqa: E402
     validate_template_syntax,
     validate_json_data,
     render_template,
