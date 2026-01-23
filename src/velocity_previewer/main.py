@@ -149,7 +149,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         # Data editor with JSON syntax highlighting
         self.dataEditor = QTextEdit()
         self.dataEditor.setPlaceholderText(
-            'Enter JSON data for the template here...\n'
+            "Enter JSON data for the template here...\n"
             'Example: {"name": "World", "items": [1, 2, 3]}'
         )
         self.dataEditor.setAcceptRichText(False)
