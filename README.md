@@ -1,10 +1,11 @@
 # Velocity Template Previewer
 
 [![CI](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
 Desktop application for previewing and rendering Apache Velocity templates with real-time syntax highlighting and validation. Perfect for developers working with Atlassian products (Jira, Confluence), ScriptRunner, email templates, and web applications.
 
-![Velocity Template Previewer](example-template-render.png)
+![Velocity Template Previewer](examples/example-template-render.png)
 
 ## What is This?
 
@@ -34,8 +35,8 @@ This tool lets you preview and test your Velocity templates instantly without de
 ```bash
 git clone https://github.com/star7js/velocity-previewer.git
 cd velocity-previewer
-pip install -r requirements.txt
-python main.py
+pip install -e .
+velocity-previewer
 ```
 
 ## Quick Start
@@ -45,7 +46,7 @@ python main.py
 3. **Render**: Press F5
 4. **Export** (optional): File > Export to HTML
 
-Try the included `example-template.vm` with `example-data.json` to see it in action.
+Try the included `examples/example-template.vm` with `examples/example-data.json` to see it in action.
 
 ## Use Cases
 
@@ -103,16 +104,19 @@ Full Apache Velocity specification supported via Airspeed engine.
 
 ```bash
 # Install dependencies
-pip install -r requirements.txt
+pip install -e .
 
 # Run tests
-python test_functionality.py
+python tests/test_functionality.py
 
 # Project structure
-├── main.py                  # Application UI and logic
-├── utils.py                 # Template processing
-├── syntax_highlighters.py   # Syntax highlighting
-└── test_functionality.py    # Tests
+├── src/velocity_previewer/    # Main package
+│   ├── main.py                # Application UI and logic
+│   ├── utils.py               # Template processing
+│   └── syntax_highlighters.py # Syntax highlighting
+├── examples/                  # Example templates and data
+├── tests/                     # Test files
+└── pyproject.toml            # Project configuration
 ```
 
 Settings (window size, recent files) are saved to:
