@@ -2,6 +2,7 @@
 
 [![CI](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 Desktop application for previewing and rendering Apache Velocity templates with real-time syntax highlighting and validation. Perfect for developers working with Atlassian products (Jira, Confluence), ScriptRunner, email templates, and web applications.
 
