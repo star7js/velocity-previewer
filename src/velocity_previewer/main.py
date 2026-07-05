@@ -1,6 +1,6 @@
 import sys
 import os
-from typing import Optional, Dict, Any
+from typing import Optional
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -19,9 +19,8 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QTextBrowser,
 )
-from PyQt5.QtCore import Qt, QSize, QTimer, QSettings, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QSize, QTimer, QSettings
 from PyQt5.QtGui import QIcon, QKeySequence, QFont
-from datetime import datetime
 
 # Import our modules
 from .utils import (
@@ -35,7 +34,6 @@ from .utils import (
     AUTO_SAVE_INTERVAL,
     validate_template_syntax,
     validate_json_data,
-    render_template,
     create_html_export,
     format_error_message,
 )
@@ -44,6 +42,7 @@ from .syntax_highlighters import (
     JSONSyntaxHighlighter,
     OutputSyntaxHighlighter,
 )
+from .renderer import TemplateRenderer, build_render_context
 
 # UI Constants
 DEFAULT_FONT = "Menlo"  # macOS native monospace font
@@ -52,26 +51,6 @@ DEFAULT_BUTTON_HEIGHT = 40
 MAX_RECENT_FILES = 10
 STATUS_MESSAGE_TIMEOUT_SHORT = 3000  # milliseconds
 STATUS_MESSAGE_TIMEOUT_LONG = 5000  # milliseconds
-
-
-class TemplateRenderer(QThread):
-    """Background thread for template rendering."""
-
-    rendered = pyqtSignal(str)
-    error = pyqtSignal(str)
-
-    def __init__(self, template_str: str, context_data: Dict[str, Any]):
-        super().__init__()
-        self.template_str = template_str
-        self.context_data = context_data
-
-    def run(self):
-        """Render the template in background thread."""
-        success, result = render_template(self.template_str, self.context_data)
-        if success:
-            self.rendered.emit(result)
-        else:
-            self.error.emit(result)
 
 
 class VelocityTemplatePreviewer(QMainWindow):
@@ -660,31 +639,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         if context_data is None:
             context_data = {}
 
-        # Add format_date function for template
-        def format_date(fmt):
-            # Support 'DDMMYYYY' and other strftime formats
-            if fmt == "DDMMYYYY":
-                return datetime.now().strftime("%d%m%Y")
-            try:
-                return datetime.now().strftime(fmt)
-            except Exception:
-                return datetime.now().strftime("%d%m%Y")
-
-        context_data["format_date"] = format_date
-        # Add dummy $user if not present (for example template)
-        if "user" not in context_data:
-            context_data["user"] = {
-                "name": "Anonymous",
-                "age": 0,
-                "email": "",
-                "location": "",
-                "bio": "",
-                "phone": "",
-                "website": "",
-                "linkedin": "",
-                "skills": [],
-                "experience": [],
-            }
+        context_data = build_render_context(context_data)
 
         # Clean up any existing thread before starting a new one
         if self._renderer_thread is not None and self._renderer_thread.isRunning():
