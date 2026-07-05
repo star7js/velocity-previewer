@@ -36,9 +36,13 @@ jobs:
       run: |
         flake8 src/ tests/ --max-line-length=88 --extend-ignore=E203,W503
 
-    - name: Run functionality tests
+    - name: Type check with mypy
       run: |
-        python tests/test_functionality.py
+        mypy src/
+
+    - name: Run tests
+      run: |
+        pytest
 
     # (Optional) Build wheel and sdist
     - name: Build package
