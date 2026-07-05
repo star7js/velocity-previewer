@@ -1,6 +1,6 @@
 import sys
 import os
-from typing import Optional
+from typing import Optional, cast
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -528,7 +528,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         is_valid, error_message, context_data = validate_json_data(data_str)
         if not is_valid:
             self.outputViewer.setText(
-                format_error_message(error_message, "JSON Data Error")
+                format_error_message(cast(str, error_message), "JSON Data Error")
             )
             self.statusBar().showMessage(
                 "JSON Data Error.", STATUS_MESSAGE_TIMEOUT_LONG
