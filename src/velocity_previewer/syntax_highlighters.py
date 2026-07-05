@@ -3,7 +3,7 @@ Syntax highlighting classes for the Velocity Template Previewer.
 """
 
 import re
-from typing import List, Tuple
+from typing import List, Optional, Tuple
 
 from PyQt5.QtGui import (
     QColor,
@@ -17,8 +17,8 @@ from PyQt5.QtGui import (
 class VelocitySyntaxHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for Velocity templates."""
 
-    def __init__(self, parent: QTextDocument) -> None:
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QTextDocument] = None) -> None:
+        super().__init__(parent)  # type: ignore[arg-type]
         self._setup_formats()
         self._setup_rules()
 
@@ -87,8 +87,8 @@ class VelocitySyntaxHighlighter(QSyntaxHighlighter):
 class JSONSyntaxHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for JSON data."""
 
-    def __init__(self, parent: QTextDocument) -> None:
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QTextDocument] = None) -> None:
+        super().__init__(parent)  # type: ignore[arg-type]
         self._setup_formats()
         self._setup_rules()
 
@@ -147,8 +147,8 @@ class JSONSyntaxHighlighter(QSyntaxHighlighter):
 class OutputSyntaxHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for rendered output."""
 
-    def __init__(self, parent: QTextDocument) -> None:
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QTextDocument] = None) -> None:
+        super().__init__(parent)  # type: ignore[arg-type]
         self._setup_formats()
         self._setup_rules()
 
