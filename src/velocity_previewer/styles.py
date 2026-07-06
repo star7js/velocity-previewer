@@ -43,6 +43,12 @@ DARK_STYLESHEET = """
         selection-background-color: #2980b9;
         selection-color: #fff;
     }
+    /* Rendered templates carry their own light-background inline styles,
+       so the preview pane stays paper-white even in dark mode. */
+    QTextBrowser#outputViewer {
+        background-color: white;
+        color: #222;
+    }
     QLabel {
         color: #eee;
     }

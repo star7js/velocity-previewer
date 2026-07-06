@@ -139,6 +139,7 @@ class VelocityTemplatePreviewer(QMainWindow):
 
         # Output viewer with better formatting
         self.outputViewer = QTextBrowser()
+        self.outputViewer.setObjectName("outputViewer")
         self.outputViewer.setPlaceholderText("Rendered output will appear here.")
         self.outputViewer.setFont(QFont(DEFAULT_FONT, DEFAULT_FONT_SIZE))
         self.outputViewer.setOpenExternalLinks(True)
