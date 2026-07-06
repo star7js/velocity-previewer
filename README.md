@@ -1,6 +1,7 @@
 # Velocity Template Previewer
 
 [![CI](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml/badge.svg)](https://github.com/star7js/velocity-previewer/actions/workflows/ci.yml) [![Python 3.9+](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/downloads/) ![PyQt5](https://img.shields.io/badge/PyQt5-5.15+-41CD52?logo=qt&logoColor=white)
+[![PyPI](https://img.shields.io/pypi/v/velocity-previewer.svg)](https://pypi.org/project/velocity-previewer/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
 
@@ -32,6 +33,13 @@ This tool lets you preview and test your Velocity templates instantly without de
 ## Installation
 
 **Requirements:** Python 3.9+ (Windows, macOS, Linux)
+
+```bash
+pip install velocity-previewer
+velocity-previewer
+```
+
+Or from source:
 
 ```bash
 git clone https://github.com/star7js/velocity-previewer.git
