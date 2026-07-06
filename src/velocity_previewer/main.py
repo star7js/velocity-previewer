@@ -25,6 +25,7 @@ from PyQt5.QtGui import QIcon, QKeySequence, QFont
 # Import our modules
 from .utils import (
     APP_NAME,
+    APP_VERSION,
     DEFAULT_WINDOW_WIDTH,
     DEFAULT_WINDOW_HEIGHT,
     TEMPLATE_FILE_FILTER,
@@ -707,8 +708,8 @@ class VelocityTemplatePreviewer(QMainWindow):
         QMessageBox.about(
             self,
             "About Velocity Template Previewer",
-            """<h3>Velocity Template Previewer</h3>
-            <p>Version 1.0</p>
+            f"""<h3>{APP_NAME}</h3>
+            <p>Version {APP_VERSION}</p>
             <p>A modern PyQt5 application for previewing and rendering
             Velocity templates.</p>
             <p>Features:</p>

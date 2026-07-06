@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "VM Visualizer Team", email = "contact@example.com"}
+    {name = "Josh Simnitt", email = "jsimnitt@gmail.com"}
 ]
 keywords = ["velocity", "template", "previewer", "pyqt5", "gui", "syntax-highlighting"]
 classifiers = [
