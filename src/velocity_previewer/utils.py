@@ -11,7 +11,7 @@ from airspeed import Template, TemplateError
 
 # --- Constants ---
 APP_NAME = "Velocity Template Previewer"
-APP_VERSION = "1.1.0"
+APP_VERSION = "1.1.1"
 DEFAULT_WINDOW_WIDTH = 1200
 DEFAULT_WINDOW_HEIGHT = 800
 TEMPLATE_FILE_FILTER = "Velocity Templates (*.vm);;All Files (*)"
