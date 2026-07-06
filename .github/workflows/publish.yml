@@ -45,3 +45,7 @@ jobs:
 
       - name: Publish to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          # A re-run or a redundant manual dispatch would otherwise hard-fail
+          # on an already-uploaded file; treat that as a no-op instead.
+          skip-existing: true
