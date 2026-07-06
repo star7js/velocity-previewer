@@ -1,6 +1,6 @@
 import sys
 import os
-from typing import Optional, Dict, Any
+from typing import Optional, cast
 from PyQt5.QtWidgets import (
     QApplication,
     QMainWindow,
@@ -19,13 +19,13 @@ from PyQt5.QtWidgets import (
     QTabWidget,
     QTextBrowser,
 )
-from PyQt5.QtCore import Qt, QSize, QTimer, QSettings, QThread, pyqtSignal
+from PyQt5.QtCore import Qt, QSize, QTimer, QSettings
 from PyQt5.QtGui import QIcon, QKeySequence, QFont
-from datetime import datetime
 
 # Import our modules
 from .utils import (
     APP_NAME,
+    APP_VERSION,
     DEFAULT_WINDOW_WIDTH,
     DEFAULT_WINDOW_HEIGHT,
     TEMPLATE_FILE_FILTER,
@@ -35,7 +35,6 @@ from .utils import (
     AUTO_SAVE_INTERVAL,
     validate_template_syntax,
     validate_json_data,
-    render_template,
     create_html_export,
     format_error_message,
 )
@@ -44,6 +43,8 @@ from .syntax_highlighters import (
     JSONSyntaxHighlighter,
     OutputSyntaxHighlighter,
 )
+from .renderer import TemplateRenderer, build_render_context
+from .styles import DARK_STYLESHEET, LIGHT_STYLESHEET
 
 # UI Constants
 DEFAULT_FONT = "Menlo"  # macOS native monospace font
@@ -52,26 +53,6 @@ DEFAULT_BUTTON_HEIGHT = 40
 MAX_RECENT_FILES = 10
 STATUS_MESSAGE_TIMEOUT_SHORT = 3000  # milliseconds
 STATUS_MESSAGE_TIMEOUT_LONG = 5000  # milliseconds
-
-
-class TemplateRenderer(QThread):
-    """Background thread for template rendering."""
-
-    rendered = pyqtSignal(str)
-    error = pyqtSignal(str)
-
-    def __init__(self, template_str: str, context_data: Dict[str, Any]):
-        super().__init__()
-        self.template_str = template_str
-        self.context_data = context_data
-
-    def run(self):
-        """Render the template in background thread."""
-        success, result = render_template(self.template_str, self.context_data)
-        if success:
-            self.rendered.emit(result)
-        else:
-            self.error.emit(result)
 
 
 class VelocityTemplatePreviewer(QMainWindow):
@@ -275,110 +256,7 @@ class VelocityTemplatePreviewer(QMainWindow):
     def _apply_styling_unsafe(self):
         """Apply modern styling to the application
         (unsafe version without error handling)."""
-        if self._dark_mode:
-            self.setStyleSheet("""
-                QMainWindow {
-                    background-color: #23272e;
-                }
-                QTabWidget::pane {
-                    border: 1px solid #444;
-                    background-color: #181a20;
-                }
-                QTabBar::tab {
-                    background-color: #23272e;
-                    color: #eee;
-                    padding: 8px 16px;
-                    margin-right: 2px;
-                    border-top-left-radius: 4px;
-                    border-top-right-radius: 4px;
-                }
-                QTabBar::tab:selected {
-                    background-color: #181a20;
-                    border-bottom: 2px solid #2980b9;
-                }
-                QPushButton {
-                    background-color: #2980b9;
-                    color: white;
-                    border: none;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    font-weight: bold;
-                }
-                QPushButton:hover {
-                    background-color: #3498db;
-                }
-                QPushButton:pressed {
-                    background-color: #21618c;
-                }
-                QTextEdit, QTextBrowser {
-                    border: 1px solid #444;
-                    border-radius: 4px;
-                    padding: 8px;
-                    background-color: #181a20;
-                    color: #eee;
-                    selection-background-color: #2980b9;
-                    selection-color: #fff;
-                }
-                QLabel {
-                    color: #eee;
-                }
-                QStatusBar {
-                    background: #23272e;
-                    color: #eee;
-                }
-            """)
-        else:
-            self.setStyleSheet("""
-                QMainWindow {
-                    background-color: #f5f5f5;
-                }
-                QTabWidget::pane {
-                    border: 1px solid #ccc;
-                    background-color: white;
-                }
-                QTabBar::tab {
-                    background-color: #e0e0e0;
-                    color: #222;
-                    padding: 8px 16px;
-                    margin-right: 2px;
-                    border-top-left-radius: 4px;
-                    border-top-right-radius: 4px;
-                }
-                QTabBar::tab:selected {
-                    background-color: white;
-                    border-bottom: 2px solid #2980b9;
-                }
-                QPushButton {
-                    background-color: #2980b9;
-                    color: white;
-                    border: none;
-                    padding: 8px 16px;
-                    border-radius: 4px;
-                    font-weight: bold;
-                }
-                QPushButton:hover {
-                    background-color: #3498db;
-                }
-                QPushButton:pressed {
-                    background-color: #21618c;
-                }
-                QTextEdit, QTextBrowser {
-                    border: 1px solid #ccc;
-                    border-radius: 4px;
-                    padding: 8px;
-                    background-color: white;
-                    color: #222;
-                    selection-background-color: #2980b9;
-                    selection-color: #fff;
-                }
-                QLabel {
-                    color: #2c3e50;
-                }
-                QStatusBar {
-                    background: #f5f5f5;
-                    color: #222;
-                }
-            """)
+        self.setStyleSheet(DARK_STYLESHEET if self._dark_mode else LIGHT_STYLESHEET)
 
     def _get_stock_icon(self, standard_icon_enum) -> QIcon:
         return self.style().standardIcon(standard_icon_enum)
@@ -651,7 +529,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         is_valid, error_message, context_data = validate_json_data(data_str)
         if not is_valid:
             self.outputViewer.setText(
-                format_error_message(error_message, "JSON Data Error")
+                format_error_message(cast(str, error_message), "JSON Data Error")
             )
             self.statusBar().showMessage(
                 "JSON Data Error.", STATUS_MESSAGE_TIMEOUT_LONG
@@ -660,31 +538,7 @@ class VelocityTemplatePreviewer(QMainWindow):
         if context_data is None:
             context_data = {}
 
-        # Add format_date function for template
-        def format_date(fmt):
-            # Support 'DDMMYYYY' and other strftime formats
-            if fmt == "DDMMYYYY":
-                return datetime.now().strftime("%d%m%Y")
-            try:
-                return datetime.now().strftime(fmt)
-            except Exception:
-                return datetime.now().strftime("%d%m%Y")
-
-        context_data["format_date"] = format_date
-        # Add dummy $user if not present (for example template)
-        if "user" not in context_data:
-            context_data["user"] = {
-                "name": "Anonymous",
-                "age": 0,
-                "email": "",
-                "location": "",
-                "bio": "",
-                "phone": "",
-                "website": "",
-                "linkedin": "",
-                "skills": [],
-                "experience": [],
-            }
+        context_data = build_render_context(context_data)
 
         # Clean up any existing thread before starting a new one
         if self._renderer_thread is not None and self._renderer_thread.isRunning():
@@ -854,8 +708,8 @@ class VelocityTemplatePreviewer(QMainWindow):
         QMessageBox.about(
             self,
             "About Velocity Template Previewer",
-            """<h3>Velocity Template Previewer</h3>
-            <p>Version 1.0</p>
+            f"""<h3>{APP_NAME}</h3>
+            <p>Version {APP_VERSION}</p>
             <p>A modern PyQt5 application for previewing and rendering
             Velocity templates.</p>
             <p>Features:</p>

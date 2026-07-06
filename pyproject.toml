@@ -6,7 +6,7 @@ readme = "README.md"
 requires-python = ">=3.9"
 license = {text = "MIT"}
 authors = [
-    {name = "VM Visualizer Team", email = "contact@example.com"}
+    {name = "Josh Simnitt"}
 ]
 keywords = ["velocity", "template", "previewer", "pyqt5", "gui", "syntax-highlighting"]
 classifiers = [
@@ -34,6 +34,7 @@ dev = [
     "black>=22.0.0",
     "flake8>=5.0.0",
     "mypy>=1.0.0",
+    "PyQt5-stubs>=5.15",
 ]
 
 [project.urls]
@@ -86,6 +87,15 @@ warn_unused_ignores = true
 warn_no_return = true
 warn_unreachable = true
 strict_equality = true
+
+[[tool.mypy.overrides]]
+module = "airspeed.*"
+ignore_missing_imports = true
+
+[[tool.mypy.overrides]]
+module = "velocity_previewer.main"
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

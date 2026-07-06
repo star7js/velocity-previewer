@@ -3,18 +3,26 @@ Syntax highlighting classes for the Velocity Template Previewer.
 """
 
 import re
-from PyQt5.QtGui import QSyntaxHighlighter, QTextCharFormat, QColor, QFont
+from typing import List, Optional, Tuple
+
+from PyQt5.QtGui import (
+    QColor,
+    QFont,
+    QSyntaxHighlighter,
+    QTextCharFormat,
+    QTextDocument,
+)
 
 
 class VelocitySyntaxHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for Velocity templates."""
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QTextDocument] = None) -> None:
+        super().__init__(parent)  # type: ignore[arg-type]
         self._setup_formats()
         self._setup_rules()
 
-    def _setup_formats(self):
+    def _setup_formats(self) -> None:
         """Setup text formats for different syntax elements."""
         # Variables: $variable or ${variable}
         self.variable_format = QTextCharFormat()
@@ -44,9 +52,9 @@ class VelocitySyntaxHighlighter(QSyntaxHighlighter):
         self.operator_format.setForeground(QColor("#34495e"))  # Dark gray
         self.operator_format.setFontWeight(QFont.Bold)
 
-    def _setup_rules(self):
+    def _setup_rules(self) -> None:
         """Setup highlighting rules."""
-        self.rules = []
+        self.rules: List[Tuple[str, QTextCharFormat]] = []
 
         # Variables: $variable or ${variable}
         self.rules.append((r"\$\{?[a-zA-Z_][a-zA-Z0-9_]*\}?", self.variable_format))
@@ -68,7 +76,7 @@ class VelocitySyntaxHighlighter(QSyntaxHighlighter):
         operators = r"[+\-*/%=<>!&|^~]"
         self.rules.append((operators, self.operator_format))
 
-    def highlightBlock(self, text):
+    def highlightBlock(self, text: str) -> None:
         """Apply highlighting to the given block of text."""
         for pattern, format in self.rules:
             for match in re.finditer(pattern, text):
@@ -79,12 +87,12 @@ class VelocitySyntaxHighlighter(QSyntaxHighlighter):
 class JSONSyntaxHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for JSON data."""
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QTextDocument] = None) -> None:
+        super().__init__(parent)  # type: ignore[arg-type]
         self._setup_formats()
         self._setup_rules()
 
-    def _setup_formats(self):
+    def _setup_formats(self) -> None:
         """Setup text formats for different JSON elements."""
         # JSON keys
         self.key_format = QTextCharFormat()
@@ -109,9 +117,9 @@ class JSONSyntaxHighlighter(QSyntaxHighlighter):
         self.punctuation_format.setForeground(QColor("#34495e"))  # Dark gray
         self.punctuation_format.setFontWeight(QFont.Bold)
 
-    def _setup_rules(self):
+    def _setup_rules(self) -> None:
         """Setup highlighting rules."""
-        self.rules = []
+        self.rules: List[Tuple[str, QTextCharFormat]] = []
 
         # JSON keys
         self.rules.append((r'"[^"]*"\s*:', self.key_format))
@@ -128,7 +136,7 @@ class JSONSyntaxHighlighter(QSyntaxHighlighter):
         # JSON punctuation
         self.rules.append((r"[{}[\],:]", self.punctuation_format))
 
-    def highlightBlock(self, text):
+    def highlightBlock(self, text: str) -> None:
         """Apply highlighting to the given block of text."""
         for pattern, format in self.rules:
             for match in re.finditer(pattern, text):
@@ -139,12 +147,12 @@ class JSONSyntaxHighlighter(QSyntaxHighlighter):
 class OutputSyntaxHighlighter(QSyntaxHighlighter):
     """Syntax highlighter for rendered output."""
 
-    def __init__(self, parent=None):
-        super().__init__(parent)
+    def __init__(self, parent: Optional[QTextDocument] = None) -> None:
+        super().__init__(parent)  # type: ignore[arg-type]
         self._setup_formats()
         self._setup_rules()
 
-    def _setup_formats(self):
+    def _setup_formats(self) -> None:
         """Setup text formats for output highlighting."""
         # HTML tags
         self.html_tag_format = QTextCharFormat()
@@ -165,9 +173,9 @@ class OutputSyntaxHighlighter(QSyntaxHighlighter):
         self.number_format = QTextCharFormat()
         self.number_format.setForeground(QColor("#f39c12"))  # Orange
 
-    def _setup_rules(self):
+    def _setup_rules(self) -> None:
         """Setup highlighting rules."""
-        self.rules = []
+        self.rules: List[Tuple[str, QTextCharFormat]] = []
 
         # HTML tags
         self.rules.append((r"<[^>]+>", self.html_tag_format))
@@ -183,7 +191,7 @@ class OutputSyntaxHighlighter(QSyntaxHighlighter):
         # Numbers
         self.rules.append((r"\b\d+\.?\d*\b", self.number_format))
 
-    def highlightBlock(self, text):
+    def highlightBlock(self, text: str) -> None:
         """Apply highlighting to the given block of text."""
         for pattern, format in self.rules:
             for match in re.finditer(pattern, text):

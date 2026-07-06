@@ -108,11 +108,16 @@ Full Apache Velocity specification supported via Airspeed engine.
 pip install -e .
 
 # Run tests
-python tests/test_functionality.py
+pytest
+
+# Type check
+mypy src/
 
 # Project structure
 ├── src/velocity_previewer/    # Main package
 │   ├── main.py                # Application UI and logic
+│   ├── renderer.py            # Background rendering & context building
+│   ├── styles.py              # Light/dark Qt stylesheets
 │   ├── utils.py               # Template processing
 │   └── syntax_highlighters.py # Syntax highlighting
 ├── examples/                  # Example templates and data
